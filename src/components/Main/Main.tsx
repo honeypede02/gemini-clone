@@ -1,12 +1,20 @@
+import { useContext} from 'react'
 import { assets } from '../../assets/assets'
 import './Main.css'
+import { Context } from '../../context/context'
+
 const Main = () => {
+  const {onSent,recentPrompt,showResult, loading,resultData, input, setInput} = useContext(Context);
+  async function sendPrompt() {
+    await onSent(input);
+  }
   return (
     <div className="main">
       <div className="nav">
         <p>Gemini</p>
         <img src={assets.user_icon} alt="" />
       </div>
+      {!showResult?
       <div className="main-container">
         <div className="greet">
           <p><span>Hello, Dev.</span></p>
@@ -30,14 +38,18 @@ const Main = () => {
             <img src={assets.message_icon} alt="" />
           </div>
         </div>
-      </div>
+      </div>:<div className='result-container'>
+        <img src={assets.user_icon} alt="" />
+        <p className="recentPromp">{recentPrompt}</p>
+        <p className="result">{resultData}</p>
+      </div>}
       <div className="main-bottom">
         <div className="search-box">
-          <input type="text" placeholder='Enter a prompt here'/>
+          <input type="text" placeholder='Enter a prompt here' onChange={(event)=>setInput(event.target.value)}/>
           <div>
             <img src={assets.gallery_icon} alt="" />
             <img src={assets.mic_icon} alt="" />
-            <img src={assets.send_icon} alt="" />
+            <img src={assets.send_icon} alt="" onClick={() => sendPrompt()} />
           </div>
         </div>
         <p className="bottom-info">

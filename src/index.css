@@ -2,9 +2,8 @@
 *{
   padding: 0;
   margin: 0;
-  background-origin: border-box;
+  box-sizing: border-box;
   font-family: Outfit;
-
 }
 
 #root{
