@@ -1,13 +1,14 @@
-import { useContext} from 'react'
+import { useContext, useEffect} from 'react'
 import { assets } from '../../assets/assets'
 import './Main.css'
 import { Context } from '../../context/context'
 
 const Main = () => {
-  const {onSent,recentPrompt,showResult, loading,resultData, input, setInput} = useContext(Context);
+  const {onSent,recentPrompt,showResult, loading,resultData, input, setInput, isError} = useContext(Context);
   async function sendPrompt() {
     await onSent(input);
   }
+
   return (
     <div className="main">
       <div className="nav">
@@ -39,17 +40,40 @@ const Main = () => {
           </div>
         </div>
       </div>:<div className='result-container'>
+        <div className="prompt-top">
         <img src={assets.user_icon} alt="" />
-        <p className="recentPromp">{recentPrompt}</p>
-        <p className="result">{resultData}</p>
+        <p className="recent-prompt">{recentPrompt}</p>
+        </div>
+        <div className="prompt-main">
+          <img src={assets.gemini_icon} alt="" />
+          {isError?
+          <p className='error'>Server is currently busy</p>:null}
+          {loading?
+            <div className='loader'>
+              <hr />
+              <hr />
+              <hr />
+            </div>:
+            <p dangerouslySetInnerHTML={{__html:resultData}}></p> 
+          }
+        </div>
       </div>}
       <div className="main-bottom">
         <div className="search-box">
-          <input type="text" placeholder='Enter a prompt here' onChange={(event)=>setInput(event.target.value)}/>
+          <input type="text" placeholder='Enter a prompt here'
+          value={input}
+           onChange={(event)=>setInput(event.target.value)}
+           onKeyDown={(e)=> 
+            {if(e.key === "Enter"){
+              sendPrompt()
+            }} }/>
           <div>
             <img src={assets.gallery_icon} alt="" />
             <img src={assets.mic_icon} alt="" />
-            <img src={assets.send_icon} alt="" onClick={() => sendPrompt()} />
+            <img 
+              src={assets.send_icon} 
+              alt=""
+              onClick={() => sendPrompt()} />
           </div>
         </div>
         <p className="bottom-info">

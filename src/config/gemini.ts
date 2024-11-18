@@ -26,9 +26,15 @@ import {
       history: [
       ],
     });
-  
-    const result = await chatSession.sendMessage(prompt);
-    return result.response.text;
+
+    try{
+      const result = await chatSession.sendMessage(prompt);
+      console.log(result.response.text())
+      return result.response.text()
+    }catch(e: any){
+      console.log(e);
+      throw new Error(e);
+    }
   }
   
   export default run;
