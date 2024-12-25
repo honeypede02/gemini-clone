@@ -1,10 +1,10 @@
-import { useContext, useEffect} from 'react'
+import { useContext} from 'react'
 import { assets } from '../../assets/assets'
 import './Main.css'
 import { Context } from '../../context/context'
 
 const Main = () => {
-  const {onSent,recentPrompt,showResult, loading,resultData, input, setInput, isError} = useContext(Context);
+  const {onSent,recentPrompt,showResult, loading,resultData, input, setInput, isError, showPause} = useContext(Context);
   async function sendPrompt() {
     await onSent(input);
   }
@@ -60,7 +60,7 @@ const Main = () => {
       </div>}
       <div className="main-bottom">
         <div className="search-box">
-          <input type="text" placeholder='Enter a prompt here'
+          <input type="text" placeholder='Enter a prompt here' disabled={loading}
           value={input}
            onChange={(event)=>setInput(event.target.value)}
            onKeyDown={(e)=> 
@@ -70,10 +70,14 @@ const Main = () => {
           <div>
             <img src={assets.gallery_icon} alt="" />
             <img src={assets.mic_icon} alt="" />
-            <img 
+            {
+              !showPause?<img 
               src={assets.send_icon} 
               alt=""
-              onClick={() => sendPrompt()} />
+              onClick={() => sendPrompt()} />:<img 
+              src={assets.stop_button} 
+              alt=""
+              />}
           </div>
         </div>
         <p className="bottom-info">

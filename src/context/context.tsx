@@ -12,13 +12,16 @@ const ContextProvider = (props:any) => {
     const [loading, setLoading] = useState(false);
     const [resultData, setResultData] = useState("");
     const [isError, setIsError] = useState(false);
+    const [stopResult, setStopResult] = useState(false);
+    const [showPause, setShowPause] = useState(false);
+    
+    
     
     
     const delayPara = (index:number, nextWord:string) => {
         setTimeout(() => {
             setResultData(prev=>prev+nextWord)
         }, (75*index));
-
     }
 
     const onSent = async (prompt:string) => {
@@ -28,6 +31,7 @@ const ContextProvider = (props:any) => {
         setResultData("")
         setInput(prompt);
         setIsError(false)
+        setShowPause(true)
         if(!previousPrompts.includes(prompt))
             setPreviousPrompts((prev) => [...prev, prompt])
         try{
@@ -45,11 +49,15 @@ const ContextProvider = (props:any) => {
             let newResponse2 = newResponse.split("*").join("</br>")
             let newResponseArray = newResponse2.split(" ")
             for(let i=0; i<newResponseArray.length; i++){
-                delayPara(i, newResponseArray[i]+" ");
+                delayPara(i, newResponseArray[i] + " ");
             }
+            setTimeout(() => {
+                setShowPause(false)
+            }, newResponseArray.length*75);
         }catch(e){
             setIsError(true);
             console.log("e="+e)
+            setShowPause(false);
         }
         setInput("");
         setLoading(false);
@@ -67,7 +75,11 @@ const ContextProvider = (props:any) => {
         input, 
         setInput,
         setShowResult, 
-        isError
+        isError,
+        stopResult, 
+        setStopResult, 
+        setLoading, 
+        showPause
     }
 
     return (

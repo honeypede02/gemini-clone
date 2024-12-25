@@ -23,13 +23,22 @@
     /* justify-self: center; */
     padding-left: 15px;
     width: 35px;
-
 }
 
 
 .sidebar .recent {
     display: flex;
     flex-direction: column;
+    max-height: 250px;
+    animation: fadeIn 1.5s;
+}
+
+.previous-prompts{
+    overflow-y: auto;
+}
+
+.previous-prompts::-webkit-scrollbar{
+    display: none;
 }
 
 .sidebar .recent-title{
@@ -76,4 +85,11 @@
 .sidebar .bottom-item {
     padding-right: 10px;
     cursor: pointer;
+}
+
+
+@media (max-width:600px){
+    .sidebar{
+        display: none;
+    }
 }

@@ -5,7 +5,7 @@ import { Context } from '../../context/context';
 const Sidebar = () => {
 
     const [menuExtended, setMenuExtended] = useState(false);
-    const {previousPrompts, onSent, setShowResult} = useContext(Context);
+    const {previousPrompts, onSent, setShowResult, loading} = useContext(Context);
   return (
     <div className='sidebar'>
         <div className='top'>
@@ -18,13 +18,19 @@ const Sidebar = () => {
             </div>
             {menuExtended?<div className="recent">
                 <p className="recent-title">Recent</p>
+                <div className="previous-prompts">
                 {previousPrompts.map((previousPrompt:string, _index:number)=>{
-                return <div className="recent-entry" key={_index} onClick={()=>{
-                    onSent(previousPrompt);
-                }}>
+                return <div className="recent-entry" key={_index} 
+                    style={{ pointerEvents: loading ? 'none' : 'auto', opacity: loading ? 0.5 : 1 }}
+                    onClick={!loading ? ()=>{
+                        onSent(previousPrompt);
+                    } : undefined}>
                     <img src={assets.message_icon} alt="" />
-                    <p>{previousPrompt.slice(0, 18)}</p>
+                    {previousPrompt.length>18?
+                    <p>{previousPrompt.slice(0, 18)}...</p>:
+                    <p>{previousPrompt.slice(0, 18)}</p>}
                 </div>})}
+                </div>
             </div>:null}
         </div>
         <div className='bottom'>
